@@ -10,7 +10,6 @@ const User = require('../../models/user');
 const Brand = require('../../models/brand');
 const auth = require('../../middleware/auth');
 const role = require('../../middleware/role');
-const mailgun = require('../../services/mailgun');
 
 // add merchant api
 router.post('/add', async (req, res) => {
@@ -52,7 +51,6 @@ router.post('/add', async (req, res) => {
     });
     const merchantDoc = await merchant.save();
 
-    await mailgun.sendEmail(email, 'merchant-application');
 
     res.status(200).json({
       success: true,
@@ -133,7 +131,6 @@ router.put('/:id/active', auth, async (req, res) => {
 
     if (!update.isActive) {
       await deactivateBrand(merchantId);
-      await mailgun.sendEmail(merchantDoc.email, 'merchant-deactivate-account');
     }
 
     res.status(200).json({
@@ -330,7 +327,6 @@ const createMerchantUser = async (email, name, merchant, host) => {
 
     await createMerchantBrand(merchantDoc);
 
-    await mailgun.sendEmail(email, 'merchant-welcome', null, name);
 
     return await User.findOneAndUpdate(query, update, {
       new: true
@@ -347,11 +343,6 @@ const createMerchantUser = async (email, name, merchant, host) => {
       resetPasswordToken,
       merchant,
       role: ROLES.Merchant
-    });
-
-    await mailgun.sendEmail(email, 'merchant-signup', host, {
-      resetToken,
-      email
     });
 
     return await user.save();
