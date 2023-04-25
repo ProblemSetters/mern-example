@@ -129,7 +129,7 @@ router.post('/register', async (req, res) => {
 
     res.status(200).json({
       success: true,
-      subscribed,
+      subscribed: false,
       token: `Bearer ${token}`,
       user: {
         id: registeredUser.id,
