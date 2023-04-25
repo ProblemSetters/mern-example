@@ -254,6 +254,8 @@ export const addProduct = () => {
       const user = getState().account.user;
       const brands = getState().brand.brandsSelect;
 
+
+
       const brand = unformatSelectOptions([product.brand]);
 
       const newProduct = {
@@ -291,22 +293,8 @@ export const addProduct = () => {
       if (!isValid) {
         return dispatch({ type: SET_PRODUCT_FORM_ERRORS, payload: errors });
       }
-      const formData = new FormData();
-      if (newProduct.image) {
-        for (const key in newProduct) {
-          if (newProduct.hasOwnProperty(key)) {
-            if (key === 'brand' && newProduct[key] === null) {
-              continue;
-            } else {
-              formData.set(key, newProduct[key]);
-            }
-          }
-        }
-      }
 
-      const response = await axios.post(`/api/product/add`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
+      const response = await axios.post(`/api/product/add`, newProduct);
 
       const successfulOptions = {
         title: `${response.data.message}`,

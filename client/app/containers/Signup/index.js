@@ -16,7 +16,6 @@ import Input from '../../components/Common/Input';
 import Button from '../../components/Common/Button';
 import Checkbox from '../../components/Common/Checkbox';
 import LoadingIndicator from '../../components/Common/LoadingIndicator';
-import SignupProvider from '../../components/Common/SignupProvider';
 
 class Signup extends React.PureComponent {
   render() {
@@ -109,7 +108,6 @@ class Signup extends React.PureComponent {
               md={{ size: '6', order: 2 }}
               className='mb-2 mb-md-0'
             >
-              <SignupProvider />
             </Col>
           </Row>
           <hr />
