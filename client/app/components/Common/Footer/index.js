@@ -9,7 +9,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Container } from 'reactstrap';
 
-import Newsletter from '../../../containers/Newsletter';
 
 const Footer = () => {
   const infoLinks = [
@@ -57,12 +56,12 @@ const Footer = () => {
               <ul>{footerLinks}</ul>
             </div>
           </div>
-          <div className='footer-block'>
+          {/* <div className='footer-block'>
             <div className='block-title'>
               <h3 className='text-uppercase'>Newsletter</h3>
               <Newsletter />
             </div>
-          </div>
+          </div> */}
         </div>
         <div className='footer-copyright'>
           <span>© {new Date().getFullYear()} MERN Store</span>

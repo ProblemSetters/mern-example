@@ -10,15 +10,12 @@ const Category = require('../../models/category');
 const auth = require('../../middleware/auth');
 const role = require('../../middleware/role');
 const checkAuth = require('../../utils/auth');
-const { s3Upload } = require('../../utils/storage');
 const {
   getStoreProductsQuery,
   getStoreProductsWishListQuery,
 } = require('../../utils/queries');
 const { ROLES } = require('../../constants');
 
-const storage = multer.memoryStorage();
-const upload = multer({ storage });
 
 // fetch product slug api
 router.get('/item/:slug', async (req, res) => {
@@ -258,10 +255,9 @@ router.post(
   '/add',
   auth,
   role.check(ROLES.Admin, ROLES.Merchant),
-  upload.single('image'),
   async (req, res) => {
     try {
-      const sku = req.body.sku;
+      let sku = req.body.sku;
       const name = req.body.name;
       const description = req.body.description;
       const quantity = req.body.quantity;
@@ -270,7 +266,6 @@ router.post(
       const isActive = req.body.isActive;
       const brand = req.body.brand;
       const image = req.file;
-
       if (!sku) {
         return res.status(400).json({ error: 'You must enter sku.' });
       }
@@ -295,7 +290,6 @@ router.post(
         return res.status(400).json({ error: 'This sku is already in use.' });
       }
 
-      // const { imageUrl, imageKey } = await s3Upload(image);
       const imageUrl = 'https://i.imgur.com/X4dH3zn.jpg';
       const product = new Product({
         sku,
