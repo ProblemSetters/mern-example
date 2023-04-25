@@ -55,19 +55,13 @@ export const handleAddToCart = product => {
     });
 
     dispatch({
-      type: ADD_TO_CART,
-      payload: product
+      type: ADD_TO_CART
     });
 
     const cartItems = JSON.parse(localStorage.getItem(CART_ITEMS));
     let newCartItems = [];
-    if (cartItems) {
-      newCartItems = [...cartItems, product];
-    } else {
-      newCartItems.push(product);
-    }
-    localStorage.setItem(CART_ITEMS, JSON.stringify(newCartItems));
-
+    newCartItems = [...cartItems, product]
+    
     dispatch(calculateCartTotal());
     dispatch(toggleCart());
   };
@@ -77,15 +71,13 @@ export const handleAddToCart = product => {
 export const handleRemoveFromCart = product => {
   return (dispatch, getState) => {
     const cartItems = JSON.parse(localStorage.getItem(CART_ITEMS));
-    const newCartItems = cartItems.filter(item => item._id !== product._id);
+    const newCartItems = cartItems.filter(item => item._id === product._id);
     localStorage.setItem(CART_ITEMS, JSON.stringify(newCartItems));
 
     dispatch({
       type: REMOVE_FROM_CART,
       payload: product
     });
-    dispatch(calculateCartTotal());
-    // dispatch(toggleCart());
   };
 };
 
@@ -96,10 +88,9 @@ export const calculateCartTotal = () => {
     let total = 0;
 
     cartItems.map(item => {
-      total += item.price * item.quantity;
+      total += item.price;
     });
 
-    total = parseFloat(total.toFixed(2));
     localStorage.setItem(CART_TOTAL, total);
     dispatch({
       type: HANDLE_CART_TOTAL,
@@ -111,7 +102,7 @@ export const calculateCartTotal = () => {
 // set cart store from local storage
 export const handleCart = () => {
   const cart = {
-    cartItems: JSON.parse(localStorage.getItem(CART_ITEMS)),
+    cartItems: localStorage.getItem(CART_ITEMS),
     cartTotal: localStorage.getItem(CART_TOTAL),
     cartId: localStorage.getItem(CART_ID)
   };
@@ -181,9 +172,9 @@ export const setCartId = cartId => {
 
 export const clearCart = () => {
   return (dispatch, getState) => {
-    localStorage.removeItem(CART_ITEMS);
-    localStorage.removeItem(CART_TOTAL);
-    localStorage.removeItem(CART_ID);
+    localStorage.setItem(CART_ITEMS);
+    localStorage.setItem(CART_TOTAL);
+    localStorage.setItem(CART_ID);
 
     dispatch({
       type: CLEAR_CART
