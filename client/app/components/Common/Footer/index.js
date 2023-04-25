@@ -17,16 +17,6 @@ const Footer = () => {
     { id: 2, name: 'Shipping', to: '/shipping' }
   ];
 
-  const footerBusinessLinks = (
-    <ul className='support-links'>
-      <li className='footer-link'>
-        <Link to='/dashboard'>Account Details</Link>
-      </li>
-      <li className='footer-link'>
-        <Link to='/dashboard/orders'>Orders</Link>
-      </li>
-    </ul>
-  );
 
   const footerLinks = infoLinks.map(item => (
     <li key={item.id} className='footer-link'>

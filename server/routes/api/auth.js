@@ -124,12 +124,11 @@ router.post('/register', async (req, res) => {
       id: registeredUser.id,
     };
 
-
     const token = jwt.sign(payload, secret, { expiresIn: tokenLife });
 
     res.status(200).json({
       success: true,
-      subscribed,
+      subscribed: false,
       token: `Bearer ${token}`,
       user: {
         id: registeredUser.id,
@@ -145,81 +144,6 @@ router.post('/register', async (req, res) => {
     });
   }
 });
-
-
-router.get(
-  '/google',
-  passport.authenticate('google', {
-    session: false,
-    scope: ['profile', 'email'],
-    accessType: 'offline',
-    approvalPrompt: 'force',
-  })
-);
-
-router.get(
-  '/google/callback',
-  passport.authenticate('google', {
-    failureRedirect: '/login',
-    session: false,
-  }),
-  (req, res) => {
-    const payload = {
-      id: req.user.id,
-    };
-
-    jwt.sign(payload, secret, { expiresIn: tokenLife }, (err, token) => {
-      const jwtToken = `Bearer ${token}`;
-
-      const htmlWithEmbeddedJWT = `
-    <html>
-      <script>
-        window.localStorage.setItem('token', '${jwtToken}');
-        window.location.href = '/auth/success';
-      </script>
-    </html>       
-    `;
-
-      res.send(htmlWithEmbeddedJWT);
-    });
-  }
-);
-
-router.get(
-  '/facebook',
-  passport.authenticate('facebook', {
-    session: false,
-    scope: ['public_profile', 'email'],
-  })
-);
-
-router.get(
-  '/facebook/callback',
-  passport.authenticate('facebook', {
-    failureRedirect: '/',
-    session: false,
-  }),
-  (req, res) => {
-    const payload = {
-      id: req.user.id,
-    };
-
-    jwt.sign(payload, secret, { expiresIn: tokenLife }, (err, token) => {
-      const jwtToken = `Bearer ${token}`;
-
-      const htmlWithEmbeddedJWT = `
-    <html>
-      <script>
-        window.localStorage.setItem('token', '${jwtToken}');
-        window.location.href = '/auth/success';
-      </script>
-    </html>       
-    `;
-
-      res.send(htmlWithEmbeddedJWT);
-    });
-  }
-);
 
 module.exports = router;
 
