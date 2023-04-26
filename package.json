@@ -11,7 +11,8 @@
     "dev": "npm-run-all --parallel dev:*",
     "start": "cross-env NODE_ENV=production node server/index.js",
     "seed:db": "node server/utils/seed.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "pretest": "npm install && bash setup.sh"
   },
   "repository": {
     "type": "git",
